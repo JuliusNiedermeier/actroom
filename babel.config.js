@@ -3,7 +3,6 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      "react-native-reanimated/plugin",
       [
         "expo-camera",
         {
@@ -13,6 +12,7 @@ module.exports = function (api) {
           recordAudioAndroid: true,
         },
       ],
+      "react-native-reanimated/plugin",
     ],
   };
 };
