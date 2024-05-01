@@ -8,7 +8,6 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { trpc } from "@/services/trpc";
 
 const createScriptOptions: {
   title: string;
@@ -39,13 +38,6 @@ export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-  useEffect(() => {
-    (async () => {
-      const data = await trpc.health.query();
-      alert(data.status);
-    })();
-  }, []);
-
   useEffect(
     () =>
       navigation.setOptions({
@@ -65,9 +57,7 @@ export default function Home() {
     [navigation]
   );
 
-  const handleAddPress = async () => {
-    bottomSheetRef.current?.present();
-  };
+  const handleAddPress = () => bottomSheetRef.current?.present();
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (

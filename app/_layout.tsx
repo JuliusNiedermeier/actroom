@@ -1,3 +1,4 @@
+import { TRPCProvider } from "@/components/trpc-provider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useFonts } from "expo-font";
@@ -41,10 +42,12 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <Stack />
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+    <TRPCProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <Stack />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </TRPCProvider>
   );
 }
