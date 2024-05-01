@@ -18,7 +18,7 @@ export default function Home() {
     onSuccess: (data) => {
       bottomSheetRef.current?.close();
       alert(
-        `Created play: ${data.fallbackTitle}\nSource type: ${data.sourceType}`
+        `Created play: ${data.fallbackTitle}\nSource type: ${data.sourceType}}`
       );
     },
   });
