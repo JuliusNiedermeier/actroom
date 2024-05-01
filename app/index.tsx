@@ -1,5 +1,5 @@
 import { useNavigation } from "expo-router";
-import { ComponentProps, useCallback, useEffect, useRef } from "react";
+import { ComponentProps, useCallback, useEffect, useMemo, useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import {
   BottomSheetBackdrop,
@@ -8,35 +8,56 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-
-const createScriptOptions: {
-  title: string;
-  description: string;
-  icon: ComponentProps<typeof Ionicons>["name"];
-  disabled?: boolean;
-}[] = [
-  {
-    title: "From a PDF file",
-    description: "Convert a PDF file directly to an Act Room script.",
-    icon: "document",
-  },
-  {
-    title: "Scan with your camera",
-    description: "Convert a PDF file directly to an",
-    icon: "camera",
-    disabled: true,
-  },
-  {
-    title: "Choose from your Gallery",
-    description: "Convert a PDF file directly to an",
-    icon: "image",
-    disabled: true,
-  },
-];
+import { trpc } from "@/services/trpc";
 
 export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const createPlayMutation = trpc.createPlay.useMutation({
+    onSuccess: (data) => {
+      bottomSheetRef.current?.close();
+      alert(
+        `Created play: ${data.fallbackTitle}\nSource type: ${data.sourceType}`
+      );
+    },
+  });
+
+  const createScriptOptions = useMemo<
+    {
+      title: string;
+      description: string;
+      icon: ComponentProps<typeof Ionicons>["name"];
+      disabled?: boolean;
+      sourceType: NonNullable<
+        typeof createPlayMutation.variables
+      >["sourceType"];
+    }[]
+  >(
+    () => [
+      {
+        title: "From a PDF file",
+        description: "Convert a PDF file directly to an Act Room script.",
+        icon: "document",
+        sourceType: "pdf",
+      },
+      {
+        title: "Scan with your camera",
+        description: "Convert a PDF file directly to an",
+        icon: "camera",
+        disabled: true,
+        sourceType: "images",
+      },
+      {
+        title: "Choose from your Gallery",
+        description: "Convert a PDF file directly to an",
+        icon: "image",
+        disabled: true,
+        sourceType: "images",
+      },
+    ],
+    []
+  );
 
   useEffect(
     () =>
@@ -89,6 +110,9 @@ export default function Home() {
               <Pressable
                 disabled={option.disabled}
                 key={option.title}
+                onPress={() =>
+                  createPlayMutation.mutate({ sourceType: option.sourceType })
+                }
                 style={({ pressed }) => ({
                   backgroundColor: pressed ? "#EDECEC" : "#F6F5F5",
                   borderRadius: 16,
