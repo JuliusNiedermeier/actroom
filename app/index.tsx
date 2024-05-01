@@ -1,6 +1,6 @@
 import { useNavigation } from "expo-router";
 import { ComponentProps, useCallback, useEffect, useRef } from "react";
-import { Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -8,6 +8,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import { trpc } from "@/services/trpc";
 
 const createScriptOptions: {
   title: string;
@@ -38,6 +39,13 @@ export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
+  useEffect(() => {
+    (async () => {
+      const data = await trpc.health.query();
+      alert(data.status);
+    })();
+  }, []);
+
   useEffect(
     () =>
       navigation.setOptions({
@@ -57,7 +65,7 @@ export default function Home() {
     [navigation]
   );
 
-  const handleAddPress = () => {
+  const handleAddPress = async () => {
     bottomSheetRef.current?.present();
   };
 
