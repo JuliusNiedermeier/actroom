@@ -40,6 +40,12 @@ export const appRouter = router({
     .query(({ input }) =>
       drizzle.query.PlayTable.findFirst({ where: eq(PlayTable.ID, input.ID) })
     ),
+
+  listPlayPreviews: publicProcedure.query(() =>
+    drizzle.query.PlayTable.findMany({
+      columns: { ID: true, title: true, conversionStatus: true },
+    })
+  ),
 });
 
 // Export type router type signature,
