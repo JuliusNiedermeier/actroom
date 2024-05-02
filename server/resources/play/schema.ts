@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 // import { PageTable } from "../schema";
 // import { BlockTable } from "../block/schema";
 
@@ -26,3 +28,9 @@ export const playTableRelations = relations(PlayTable, ({ many }) => ({
   // pages: many(PageTable),
   // blocks: many(BlockTable),
 }));
+
+export const PlayTableInsertSchema = createInsertSchema(PlayTable);
+export const PlayTableSelectSchema = createSelectSchema(PlayTable);
+
+export type PlayTableInsert = z.infer<typeof PlayTableInsertSchema>;
+export type PlayTableSelect = z.infer<typeof PlayTableSelectSchema>;
