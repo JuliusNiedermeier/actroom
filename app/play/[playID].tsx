@@ -10,8 +10,7 @@ const PlayScreen: FC = () => {
   const { data: playData } = trpc.getPlay.useQuery({ ID: playID });
 
   useEffect(() => {
-    if (!playData) return;
-    navigation.setOptions({ headerTitle: playData.title });
+    navigation.setOptions({ headerTitle: playData?.title || "" });
   }, [navigation, playData]);
 
   useEffect(() => {
