@@ -46,6 +46,12 @@ export const appRouter = router({
       columns: { ID: true, title: true, conversionStatus: true },
     })
   ),
+
+  deletePlay: publicProcedure
+    .input(z.object({ ID: z.string() }))
+    .mutation(({ input }) =>
+      drizzle.delete(PlayTable).where(eq(PlayTable.ID, input.ID))
+    ),
 });
 
 // Export type router type signature,
