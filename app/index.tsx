@@ -9,17 +9,20 @@ import {
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { trpc } from "@/services/trpc";
-import { getDocumentAsync } from "expo-document-picker";
+import { useRouter } from "expo-router";
 
 export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const { push } = useRouter();
 
   const createPlayMutation = trpc.createPlay.useMutation({
     onSuccess: async (data) => {
       bottomSheetRef.current?.close();
-      const doc = await getDocumentAsync();
-      alert(`Picked ${doc.assets?.length} files`);
+      push({
+        pathname: "/play/[play]",
+        params: { play: data.ID, title: data.title, firstVisit: "true" },
+      });
     },
   });
 

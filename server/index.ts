@@ -6,6 +6,7 @@ import {
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
+import { randomUUID } from "node:crypto";
 
 export const appRouter = router({
   health: publicProcedure.query(({ ctx, input }) => {
@@ -17,9 +18,12 @@ export const appRouter = router({
     )
     .mutation(({ input }) => {
       return {
+        ID: randomUUID(),
         sourceType: input.sourceType,
-        fallbackTitle: uniqueNamesGenerator({
+        title: uniqueNamesGenerator({
           dictionaries: [adjectives, colors, animals],
+          style: "capital",
+          separator: " ",
         }),
       };
     }),
