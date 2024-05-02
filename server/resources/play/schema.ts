@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { PageTable } from "../schema";
-import { BlockTable } from "../block/schema";
+// import { PageTable } from "../schema";
+// import { BlockTable } from "../block/schema";
 
 export const playConversionStatusEnum = pgEnum("play_conversion_status", [
   "pending",
@@ -14,7 +14,7 @@ export const playSourceTypeEnum = pgEnum("play_source_type", ["pdf", "image"]);
 
 export const PlayTable = pgTable("play", {
   ID: uuid("id").primaryKey().defaultRandom(),
-  title: text("name").notNull(),
+  title: text("title").notNull(),
   visited: boolean("visited").notNull().default(false),
   conversionStatus: playConversionStatusEnum("conversion_status")
     .notNull()
@@ -23,6 +23,6 @@ export const PlayTable = pgTable("play", {
 });
 
 export const playTableRelations = relations(PlayTable, ({ many }) => ({
-  pages: many(PageTable),
-  blocks: many(BlockTable),
+  // pages: many(PageTable),
+  // blocks: many(BlockTable),
 }));
