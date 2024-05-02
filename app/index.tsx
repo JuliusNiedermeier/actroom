@@ -1,15 +1,11 @@
 import { useNavigation } from "expo-router";
-import { ComponentProps, useCallback, useEffect, useMemo, useRef } from "react";
+import { ComponentProps, useEffect, useMemo, useRef } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { trpc } from "@/services/trpc";
 import { useRouter } from "expo-router";
+import { renderBackdrop } from "@/utils/render-backdrop";
 
 export default function Home() {
   const navigation = useNavigation();
@@ -86,17 +82,6 @@ export default function Home() {
   );
 
   const handleAddPress = () => bottomSheetRef.current?.present();
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
-    []
-  );
 
   return (
     <View style={{ flex: 1 }}>
