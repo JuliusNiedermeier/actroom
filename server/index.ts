@@ -7,6 +7,8 @@ import {
 } from "unique-names-generator";
 import { PlayTable, PlayTableInsertSchema } from "./resources/schema";
 import { drizzle } from "./services/drizzle";
+import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 export const appRouter = router({
   health: publicProcedure.query(({ ctx, input }) => {
@@ -32,6 +34,12 @@ export const appRouter = router({
 
       return playRecord;
     }),
+
+  getPlay: publicProcedure
+    .input(z.object({ ID: z.string() }))
+    .query(({ input }) =>
+      drizzle.query.PlayTable.findFirst({ where: eq(PlayTable.ID, input.ID) })
+    ),
 });
 
 // Export type router type signature,
