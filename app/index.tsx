@@ -20,8 +20,8 @@ export default function Home() {
     onSuccess: async (data) => {
       bottomSheetRef.current?.close();
       push({
-        pathname: "/play/[play]",
-        params: { play: data.ID, title: data.title, firstVisit: "true" },
+        pathname: "/play/[playID]",
+        params: { playID: data.ID },
       });
     },
   });
@@ -49,14 +49,14 @@ export default function Home() {
         description: "Convert a PDF file directly to an",
         icon: "camera",
         disabled: true,
-        sourceType: "images",
+        sourceType: "image",
       },
       {
         title: "Choose from your Gallery",
         description: "Convert a PDF file directly to an",
         icon: "image",
         disabled: true,
-        sourceType: "images",
+        sourceType: "image",
       },
     ],
     []
