@@ -9,17 +9,17 @@ import {
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { trpc } from "@/services/trpc";
+import { getDocumentAsync } from "expo-document-picker";
 
 export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const createPlayMutation = trpc.createPlay.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       bottomSheetRef.current?.close();
-      alert(
-        `Created play: ${data.fallbackTitle}\nSource type: ${data.sourceType}}`
-      );
+      const doc = await getDocumentAsync();
+      alert(`Picked ${doc.assets?.length} files`);
     },
   });
 
