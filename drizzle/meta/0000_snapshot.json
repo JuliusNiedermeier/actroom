@@ -1,0 +1,75 @@
+{
+  "id": "cac8ff41-cd8a-4495-8858-bffca8aa0af2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "play": {
+      "name": "play",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visited": {
+          "name": "visited",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "conversion_status": {
+          "name": "conversion_status",
+          "type": "play_conversion_status",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "source_type": {
+          "name": "source_type",
+          "type": "play_source_type",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "play_conversion_status": {
+      "name": "play_conversion_status",
+      "values": {
+        "pending": "pending",
+        "processing": "processing",
+        "complete": "complete",
+        "failed": "failed"
+      }
+    },
+    "play_source_type": {
+      "name": "play_source_type",
+      "values": {
+        "pdf": "pdf",
+        "image": "image"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
