@@ -1,31 +1,36 @@
 import { publicProcedure, router } from "./trpc";
-import { z } from "zod";
 import {
   adjectives,
   animals,
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { randomUUID } from "node:crypto";
+import { PlayTable, PlayTableInsertSchema } from "./resources/schema";
+import { drizzle } from "./services/drizzle";
 
 export const appRouter = router({
   health: publicProcedure.query(({ ctx, input }) => {
     return { status: "healthy" };
   }),
+
   createPlay: publicProcedure
-    .input(
-      z.object({ sourceType: z.union([z.literal("pdf"), z.literal("images")]) })
-    )
-    .mutation(({ input }) => {
-      return {
-        ID: randomUUID(),
-        sourceType: input.sourceType,
-        title: uniqueNamesGenerator({
-          dictionaries: [adjectives, colors, animals],
-          style: "capital",
-          separator: " ",
-        }),
-      };
+    .input(PlayTableInsertSchema.pick({ sourceType: true }))
+    .mutation(async ({ input }) => {
+      const generatedTitle = uniqueNamesGenerator({
+        dictionaries: [adjectives, colors, animals],
+        style: "capital",
+        separator: " ",
+      });
+
+      const [playRecord] = await drizzle
+        .insert(PlayTable)
+        .values({
+          title: generatedTitle,
+          sourceType: input.sourceType,
+        })
+        .returning();
+
+      return playRecord;
     }),
 });
 
