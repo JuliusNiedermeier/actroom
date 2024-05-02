@@ -16,10 +16,12 @@ export default function Home() {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { push } = useRouter();
 
-  const { data: playPreviews } = trpc.listPlayPreviews.useQuery();
+  const { data: playPreviews, refetch: refetchPlayPreviews } =
+    trpc.listPlayPreviews.useQuery();
 
   const createPlayMutation = trpc.createPlay.useMutation({
     onSuccess: async (data) => {
+      refetchPlayPreviews();
       bottomSheetRef.current?.close();
       push({
         pathname: "/play/[playID]",
