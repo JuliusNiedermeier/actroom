@@ -1,1 +1,0 @@
-ALTER TABLE "page" ADD COLUMN "file" text NOT NULL;

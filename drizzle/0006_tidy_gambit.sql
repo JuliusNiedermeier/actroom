@@ -1,1 +1,0 @@
-ALTER TABLE "play" ADD COLUMN "converted" boolean DEFAULT false NOT NULL;
