@@ -1,6 +1,6 @@
 import { useNavigation } from "expo-router";
 import { ComponentProps, useCallback, useEffect, useMemo, useRef } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -15,6 +15,8 @@ export default function Home() {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { push } = useRouter();
+
+  const { data: playPreviews } = trpc.listPlayPreviews.useQuery();
 
   const createPlayMutation = trpc.createPlay.useMutation({
     onSuccess: async (data) => {
@@ -96,6 +98,27 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, padding: 16 }}>
+        {playPreviews?.map((preview) => (
+          <Pressable
+            key={preview.ID}
+            onPress={() =>
+              push({
+                pathname: "/play/[playID]",
+                params: { playID: preview.ID },
+              })
+            }
+            style={({ pressed }) => ({
+              backgroundColor: pressed ? "#F6F5F5" : "white",
+              padding: 16,
+              borderRadius: 16,
+            })}
+          >
+            <Text>{preview.title}</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+
       <BottomSheetModal
         ref={bottomSheetRef}
         backdropComponent={renderBackdrop}
