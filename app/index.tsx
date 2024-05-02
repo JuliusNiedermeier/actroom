@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1, padding: 16 }}>
+      <ScrollView style={{ padding: 16 }} contentContainerStyle={{ gap: 8 }}>
         {playPreviews?.map((preview) => (
           <Pressable
             key={preview.ID}
