@@ -50,6 +50,9 @@ dependencies:
   expo-dev-client:
     specifier: ^3.3.11
     version: 3.3.11(expo@50.0.17)
+  expo-document-picker:
+    specifier: ~11.10.1
+    version: 11.10.1(expo@50.0.17)
   expo-font:
     specifier: ~11.10.3
     version: 11.10.3(expo@50.0.17)
@@ -5514,6 +5517,14 @@ packages:
       expo: 50.0.17(@babel/core@7.24.5)(@react-native/babel-preset@0.74.81)
       expo-dev-menu-interface: 1.7.2(expo@50.0.17)
       semver: 7.6.0
+    dev: false
+
+  /expo-document-picker@11.10.1(expo@50.0.17):
+    resolution: {integrity: sha512-A1MiLfyXQ+KxanRO5lYxYQy3ryV+25JHe5Ai/BLV+FJU0QXByUF+Y/dn35WVPx5gpdZXC8UJ4ejg5SKSoeconw==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.17(@babel/core@7.24.5)(@react-native/babel-preset@0.74.81)
     dev: false
 
   /expo-file-system@16.0.9(expo@50.0.17):
