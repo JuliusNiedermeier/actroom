@@ -9,6 +9,7 @@ import { PlayTable, PlayTableInsertSchema } from "./resources/schema";
 import { drizzle } from "./services/drizzle";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
+import { PlayTableUpdateSchema } from "./resources/play/schema";
 
 export const appRouter = router({
   health: publicProcedure.query(({ ctx, input }) => {
@@ -46,6 +47,17 @@ export const appRouter = router({
       columns: { ID: true, title: true, conversionStatus: true },
     })
   ),
+
+  updatePlay: publicProcedure
+    .input(z.object({ ID: z.string(), data: PlayTableUpdateSchema }))
+    .mutation(async ({ input }) => {
+      const [updatedPlay] = await drizzle
+        .update(PlayTable)
+        .set(input.data)
+        .where(eq(PlayTable.ID, input.ID))
+        .returning();
+      return updatedPlay;
+    }),
 
   deletePlay: publicProcedure
     .input(z.object({ ID: z.string() }))
