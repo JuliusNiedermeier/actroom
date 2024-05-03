@@ -2,7 +2,7 @@ import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { FC, useEffect } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
-import { Pressable, View } from "react-native";
+import { Pressable, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const PlayScreen: FC = () => {
@@ -44,11 +44,30 @@ const PlayScreen: FC = () => {
     });
   }, [navigation, playData]);
 
+  const selectDocument = async () => {
+    getDocumentAsync();
+  };
+
   useEffect(() => {
-    if (playData?.visited === false) getDocumentAsync();
+    if (playData?.visited === false) selectDocument();
   }, [playData?.visited]);
 
-  return <View style={{ flex: 1 }}></View>;
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Pressable
+        onPress={selectDocument}
+        style={({ pressed }) => ({
+          paddingHorizontal: 32,
+          paddingVertical: 16,
+          borderRadius: 16,
+          backgroundColor: "white",
+          opacity: pressed ? 0.5 : 1,
+        })}
+      >
+        <Text>Select PDF</Text>
+      </Pressable>
+    </View>
+  );
 };
 
 export default PlayScreen;
