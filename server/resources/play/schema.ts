@@ -30,7 +30,13 @@ export const playTableRelations = relations(PlayTable, ({ many }) => ({
 }));
 
 export const PlayTableInsertSchema = createInsertSchema(PlayTable);
+export const PlayTableUpdateSchema = createInsertSchema(PlayTable)
+  .omit({
+    ID: true,
+  })
+  .partial();
 export const PlayTableSelectSchema = createSelectSchema(PlayTable);
 
 export type PlayTableInsert = z.infer<typeof PlayTableInsertSchema>;
+export type PlayTableUpdate = z.infer<typeof PlayTableUpdateSchema>;
 export type PlayTableSelect = z.infer<typeof PlayTableSelectSchema>;
