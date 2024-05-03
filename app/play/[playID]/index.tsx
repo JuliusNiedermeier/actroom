@@ -45,7 +45,10 @@ const PlayScreen: FC = () => {
   }, [navigation, playData]);
 
   const selectDocument = async () => {
-    getDocumentAsync();
+    const selection = await getDocumentAsync({
+      multiple: false,
+      type: "application/pdf",
+    });
   };
 
   useEffect(() => {
