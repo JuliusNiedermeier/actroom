@@ -12,6 +12,13 @@ const PlayScreen: FC = () => {
 
   const { data: playData } = trpc.getPlay.useQuery({ ID: playID });
 
+  const updatePlayMutation = trpc.updatePlay.useMutation();
+
+  useEffect(() => {
+    if (!playData || playData.visited) return;
+    updatePlayMutation.mutate({ ID: playID, data: { visited: true } });
+  }, [playData]);
+
   const handleOptionsPress = () => {
     push({ pathname: "/play/[playID]/settings/", params: { playID } });
   };
