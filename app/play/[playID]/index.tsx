@@ -1,12 +1,9 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
 import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import { renderBackdrop } from "@/utils/render-backdrop";
-import { Modal } from "react-native";
 
 const PlayScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
