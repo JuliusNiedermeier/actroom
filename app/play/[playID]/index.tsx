@@ -2,7 +2,7 @@ import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { FC, useEffect } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const PlayScreen: FC = () => {
