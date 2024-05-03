@@ -7,6 +7,7 @@ loadEnvConfig(cwd());
 const envSchema = z.object({
   NEON_CONNECTION_STRING: z.string(),
   GEMINI_API_KEY: z.string(),
+  BLOB_READ_WRITE_TOKEN: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
