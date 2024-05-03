@@ -20,7 +20,7 @@ export default function Home() {
       refetchPlayPreviews();
       bottomSheetRef.current?.close();
       push({
-        pathname: "/play/[playID]",
+        pathname: "/play/[playID]/",
         params: { playID: data.ID },
       });
     },
@@ -91,7 +91,7 @@ export default function Home() {
             key={preview.ID}
             onPress={() =>
               push({
-                pathname: "/play/[playID]",
+                pathname: "/play/[playID]/",
                 params: { playID: preview.ID },
               })
             }
