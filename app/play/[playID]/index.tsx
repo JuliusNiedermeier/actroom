@@ -9,10 +9,13 @@ const PlayScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
   const navigation = useNavigation();
   const { push } = useRouter();
+  const { getPlay } = trpc.useUtils();
 
   const { data: playData } = trpc.getPlay.useQuery({ ID: playID });
 
-  const updatePlayMutation = trpc.updatePlay.useMutation();
+  const updatePlayMutation = trpc.updatePlay.useMutation({
+    onSuccess: () => getPlay.invalidate({ ID: playID }),
+  });
 
   useEffect(() => {
     if (!playData || playData.visited) return;
