@@ -1,0 +1,131 @@
+{
+  "id": "7ed0862b-f214-4610-aee4-e1fd7252758b",
+  "prevId": "c15bf31c-f32c-45f9-9ffb-dd706b1545f9",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "play": {
+      "name": "play",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visited": {
+          "name": "visited",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "conversion_status": {
+          "name": "conversion_status",
+          "type": "play_conversion_status",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "source_type": {
+          "name": "source_type",
+          "type": "play_source_type",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "source_part": {
+      "name": "source_part",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "play_id": {
+          "name": "play_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "play_source_type",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storage_uri": {
+          "name": "storage_uri",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "upload_complete": {
+          "name": "upload_complete",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "source_part_play_id_play_id_fk": {
+          "name": "source_part_play_id_play_id_fk",
+          "tableFrom": "source_part",
+          "tableTo": "play",
+          "columnsFrom": [
+            "play_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "play_conversion_status": {
+      "name": "play_conversion_status",
+      "values": {
+        "pending": "pending",
+        "processing": "processing",
+        "complete": "complete",
+        "failed": "failed"
+      }
+    },
+    "play_source_type": {
+      "name": "play_source_type",
+      "values": {
+        "pdf": "pdf",
+        "image": "image"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
