@@ -17,8 +17,7 @@ const PlayScreen: FC = () => {
     onSuccess: () => getPlay.invalidate({ ID: playID }),
   });
 
-  const createSignedUploadURLMutation =
-    trpc.createSignedUploadURL.useMutation();
+  const createSignedUploadURLMutation = trpc.createSourcePart.useMutation();
 
   useEffect(() => {
     if (!playData || playData.visited) return;
@@ -61,16 +60,18 @@ const PlayScreen: FC = () => {
     const fileResponse = await fetch(file.uri);
     const fileBlob = await fileResponse.blob();
 
-    const signedUploadURL = await createSignedUploadURLMutation.mutateAsync();
+    const { uploadURL } = await createSignedUploadURLMutation.mutateAsync({
+      playID,
+      type: "pdf",
+    });
 
-    const response = await fetch(signedUploadURL, {
+    const response = await fetch(uploadURL, {
       method: "PUT",
       headers: { "Content-Type": fileBlob.type },
       body: fileBlob,
     });
 
-    if (response.ok) alert("Document upload was successful");
-    else alert("Document upload failed");
+    if (!response.ok) return alert("Upload failed");
   };
 
   useEffect(() => {
