@@ -14,6 +14,8 @@ const envSchema = z.object({
   GCP_CLIENT_EMAIL: z.string(),
   GCP_CLIENT_ID: z.string(),
   GCP_CLIENT_X509_CERT_URL: z.string(),
+
+  GCP_BUCKET_NAME: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
