@@ -1,4 +1,4 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { playSourceTypeEnum, playTable } from "../play/schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
@@ -11,6 +11,7 @@ export const sourcePartTable = pgTable("source_part", {
     .references(() => playTable.ID),
   type: playSourceTypeEnum("type").notNull(),
   storageURI: text("storage_uri").notNull(),
+  upload_complete: boolean("upload_complete").notNull().default(false),
 });
 
 export const sourcePartRelations = relations(sourcePartTable, ({ one }) => ({
