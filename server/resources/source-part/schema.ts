@@ -9,7 +9,7 @@ export const sourcePartTable = pgTable("source_part", {
   playID: uuid("play_id")
     .notNull()
     .references(() => playTable.ID),
-  type: playSourceTypeEnum("type"),
+  type: playSourceTypeEnum("type").notNull(),
   storageURI: text("storage_uri").notNull(),
 });
 
