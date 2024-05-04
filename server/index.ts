@@ -10,6 +10,7 @@ import { drizzle } from "./services/drizzle";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { PlayTableUpdateSchema } from "./resources/play/schema";
+import { bucket } from "./services/gcp";
 
 export const appRouter = router({
   health: publicProcedure.query(({ ctx, input }) => {
@@ -64,6 +65,20 @@ export const appRouter = router({
     .mutation(({ input }) =>
       drizzle.delete(PlayTable).where(eq(PlayTable.ID, input.ID))
     ),
+
+  createSignedUploadURL: publicProcedure.mutation(async () => {
+    const sessionExpiryDate = new Date();
+    sessionExpiryDate.setDate(sessionExpiryDate.getMinutes() + 10);
+
+    const file = bucket.file(`document-${Math.floor(Math.random() * 1000)}`);
+    const [signedURL] = await file.getSignedUrl({
+      action: "write",
+      expires: sessionExpiryDate,
+      contentType: "application/pdf",
+    });
+
+    return signedURL;
+  }),
 });
 
 // Export type router type signature,
