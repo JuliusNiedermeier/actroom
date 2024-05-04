@@ -7,15 +7,22 @@ import { deletePlay } from "./resources/play/actions/delete-play";
 import { createSourcePart } from "./resources/source-part/actions/create-soruce-part";
 import { updateSourcePart } from "./resources/source-part/actions/update-soruce-part";
 
+const playRouter = router({
+  create: createPlay,
+  getOne: getPlay,
+  listPreviews: listPlayPreviews,
+  update: updatePlay,
+  delete: deletePlay,
+});
+
+const sourcePartRouter = router({
+  create: createSourcePart,
+  update: updateSourcePart,
+});
+
 export const appRouter = router({
-  play: {
-    create: createPlay,
-    getOne: getPlay,
-    listPreviews: listPlayPreviews,
-    update: updatePlay,
-    delete: deletePlay,
-  },
-  sourcePart: { create: createSourcePart, update: updateSourcePart },
+  play: playRouter,
+  sourcePart: sourcePartRouter,
 });
 
 // Export type router type signature,
