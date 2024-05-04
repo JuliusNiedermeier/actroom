@@ -8,7 +8,7 @@ import { randomUUID } from "node:crypto";
 import { bucket } from "@/server/services/gcp";
 import { drizzle } from "@/server/services/drizzle";
 
-const sourcePartMimeTypeMap: Record<
+export const sourcePartMimeTypeMap: Record<
   typeof sourcePartTableInsertSchema.shape.type._type,
   string
 > = {

@@ -6,6 +6,7 @@ import { updatePlay } from "./resources/play/actions/update-play";
 import { deletePlay } from "./resources/play/actions/delete-play";
 import { createSourcePart } from "./resources/source-part/actions/create-soruce-part";
 import { updateSourcePart } from "./resources/source-part/actions/update-soruce-part";
+import { convertPlay } from "./resources/play/actions/convert";
 
 const playRouter = router({
   create: createPlay,
@@ -13,6 +14,7 @@ const playRouter = router({
   listPreviews: listPlayPreviews,
   update: updatePlay,
   delete: deletePlay,
+  convert: convertPlay,
 });
 
 const sourcePartRouter = router({
