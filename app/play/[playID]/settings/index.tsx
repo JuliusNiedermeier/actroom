@@ -8,11 +8,11 @@ const PlaySettingsScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
   const navigation = useNavigation();
   const { navigate } = useRouter();
-  const { listPlayPreviews } = trpc.useUtils();
+  const { play } = trpc.useUtils();
 
-  const deletePlayMutation = trpc.deletePlay.useMutation({
+  const deletePlayMutation = trpc.play.delete.useMutation({
     onSuccess: () => {
-      listPlayPreviews.invalidate();
+      play.listPreviews.invalidate();
       navigate("/");
     },
   });
