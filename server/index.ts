@@ -55,7 +55,10 @@ export const appRouter = router({
   getPlay: publicProcedure
     .input(z.object({ ID: z.string() }))
     .query(({ input }) =>
-      drizzle.query.playTable.findFirst({ where: eq(playTable.ID, input.ID) })
+      drizzle.query.playTable.findFirst({
+        where: eq(playTable.ID, input.ID),
+        with: { sourceParts: true },
+      })
     ),
 
   listPlayPreviews: publicProcedure.query(() =>
