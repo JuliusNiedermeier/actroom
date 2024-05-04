@@ -6,7 +6,7 @@ import {
   text,
   uuid,
 } from "drizzle-orm/pg-core";
-import { PlayTable } from "../schema";
+import { playTable } from "../schema";
 import { relations, InferSelectModel } from "drizzle-orm";
 
 export const blockTypeEnum = pgEnum("block_type", [
@@ -23,7 +23,7 @@ export const blockTable = pgTable("block", {
   ID: serial("id"),
   playID: uuid("play_id")
     .notNull()
-    .references(() => PlayTable.ID, { onDelete: "cascade" }),
+    .references(() => playTable.ID, { onDelete: "cascade" }),
   position: integer("position").notNull(),
   type: blockTypeEnum("type").notNull(),
   content: text("content").notNull(),
@@ -31,9 +31,9 @@ export const blockTable = pgTable("block", {
 });
 
 export const blockTableRelations = relations(blockTable, ({ one }) => ({
-  play: one(PlayTable, {
+  play: one(playTable, {
     fields: [blockTable.playID],
-    references: [PlayTable.ID],
+    references: [playTable.ID],
   }),
 }));
 

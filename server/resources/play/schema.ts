@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { sourcePartTable } from "../source-part/schema";
+import { sourcePartTable } from "../schema";
 // import { pageTable } from "../schema";
 // import { blockTable } from "../block/schema";
 

@@ -1,5 +1,5 @@
 export {
-  playTable as PlayTable,
+  playTable,
   playConversionStatusEnum,
   playSourceTypeEnum,
   playTableRelations,
@@ -10,5 +10,16 @@ export {
   type PlayTableUpdate,
   type PlayTableSelect,
 } from "./play/schema";
+
+export {
+  sourcePartTable,
+  sourcePartRelations,
+  sourcePartTableInsertSchema,
+  sourcePartTableUpdateSchema,
+  sourcePartTableSelectSchema,
+  type SourcePartTableInsert,
+  type SourcePartTableUpdate,
+  type SourcePartTableSelect,
+} from "./source-part/schema";
 // export { pageTable, pageTableRelations } from "./page/schema";
 // export { blockTable, blockTypeEnum, blockTableRelations } from "./block/schema";

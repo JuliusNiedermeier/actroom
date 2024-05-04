@@ -1,5 +1,5 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { playSourceTypeEnum, playTable } from "../play/schema";
+import { playSourceTypeEnum, playTable } from "../schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
