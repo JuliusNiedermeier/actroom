@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { sourcePartTable } from "../source-part/schema";
 // import { pageTable } from "../schema";
 // import { blockTable } from "../block/schema";
 
@@ -25,6 +26,7 @@ export const playTable = pgTable("play", {
 });
 
 export const playTableRelations = relations(playTable, ({ many }) => ({
+  sourceParts: many(sourcePartTable),
   // pages: many(pageTable),
   // blocks: many(blockTable),
 }));
