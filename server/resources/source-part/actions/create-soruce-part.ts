@@ -26,7 +26,7 @@ export const createSourcePart = publicProcedure
   .mutation(async ({ input }) => {
     const sourcePartID = randomUUID();
 
-    const file = bucket.file(`source-parts/${sourcePartID}`);
+    const file = bucket.file(`source-parts/${input.playID}:${sourcePartID}`);
 
     const [sourcePart] = await drizzle
       .insert(sourcePartTable)
