@@ -8,6 +8,13 @@
       "when": 1714648927528,
       "tag": "0000_complete_phantom_reporter",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714842990992,
+      "tag": "0001_curious_juggernaut",
+      "breakpoints": true
     }
   ]
 }
