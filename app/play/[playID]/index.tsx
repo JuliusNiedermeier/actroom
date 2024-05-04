@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
 import { Pressable, View, Text } from "react-native";
@@ -9,16 +9,22 @@ const PlayScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
   const navigation = useNavigation();
   const { push } = useRouter();
-  const { getPlay } = trpc.useUtils();
 
-  const { data: playData } = trpc.getPlay.useQuery({ ID: playID });
-
-  const updatePlayMutation = trpc.updatePlay.useMutation({
-    onSuccess: () => getPlay.invalidate({ ID: playID }),
+  const { data: playData, refetch: refetchPlay } = trpc.getPlay.useQuery({
+    ID: playID,
   });
 
-  const createSignedUploadURLMutation = trpc.createSourcePart.useMutation();
-  const updateSignedUploadURLMutation = trpc.updateSourcePart.useMutation();
+  const updatePlayMutation = trpc.updatePlay.useMutation({
+    onSuccess: () => refetchPlay(),
+  });
+
+  const createSourcePartMutation = trpc.createSourcePart.useMutation({
+    onSuccess: () => refetchPlay(),
+  });
+
+  const updateSourcePartMutation = trpc.updateSourcePart.useMutation({
+    onSuccess: () => refetchPlay(),
+  });
 
   useEffect(() => {
     if (!playData || playData.visited) return;
@@ -28,6 +34,14 @@ const PlayScreen: FC = () => {
   const handleOptionsPress = () => {
     push({ pathname: "/play/[playID]/settings/", params: { playID } });
   };
+
+  const playStatus = useMemo(() => {
+    if (!playData) return null;
+    if (playData.sourceParts.length < 1) return "awaiting-upload";
+    if (playData.sourceParts.filter((part) => part.upload_complete).length < 1)
+      return "uploading";
+    return "awaiting-conversion";
+  }, [playData]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,7 +76,7 @@ const PlayScreen: FC = () => {
     const fileBlob = await fileResponse.blob();
 
     const { sourcePart, uploadURL } =
-      await createSignedUploadURLMutation.mutateAsync({
+      await createSourcePartMutation.mutateAsync({
         playID,
         type: "pdf",
       });
@@ -75,7 +89,7 @@ const PlayScreen: FC = () => {
 
     if (!response.ok) return alert("Upload failed");
 
-    await updateSignedUploadURLMutation.mutateAsync({
+    await updateSourcePartMutation.mutateAsync({
       ID: sourcePart.ID,
       data: { upload_complete: true },
     });
@@ -87,18 +101,22 @@ const PlayScreen: FC = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Pressable
-        onPress={selectDocument}
-        style={({ pressed }) => ({
-          paddingHorizontal: 32,
-          paddingVertical: 16,
-          borderRadius: 16,
-          backgroundColor: "white",
-          opacity: pressed ? 0.5 : 1,
-        })}
-      >
-        <Text>Select PDF</Text>
-      </Pressable>
+      {playStatus === "awaiting-upload" && (
+        <Pressable
+          onPress={selectDocument}
+          style={({ pressed }) => ({
+            paddingHorizontal: 32,
+            paddingVertical: 16,
+            borderRadius: 16,
+            backgroundColor: "white",
+            opacity: pressed ? 0.5 : 1,
+          })}
+        >
+          <Text>Select PDF</Text>
+        </Pressable>
+      )}
+      {playStatus === "uploading" && <Text>Uploading...</Text>}
+      {playStatus === "awaiting-conversion" && <Text>Ready to convert</Text>}
     </View>
   );
 };
