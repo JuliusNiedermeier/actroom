@@ -10,19 +10,19 @@ const PlayScreen: FC = () => {
   const navigation = useNavigation();
   const { push } = useRouter();
 
-  const { data: playData, refetch: refetchPlay } = trpc.getPlay.useQuery({
+  const { data: playData, refetch: refetchPlay } = trpc.play.getOne.useQuery({
     ID: playID,
   });
 
-  const updatePlayMutation = trpc.updatePlay.useMutation({
+  const updatePlayMutation = trpc.play.update.useMutation({
     onSuccess: () => refetchPlay(),
   });
 
-  const createSourcePartMutation = trpc.createSourcePart.useMutation({
+  const createSourcePartMutation = trpc.sourcePart.create.useMutation({
     onSuccess: () => refetchPlay(),
   });
 
-  const updateSourcePartMutation = trpc.updateSourcePart.useMutation({
+  const updateSourcePartMutation = trpc.sourcePart.update.useMutation({
     onSuccess: () => refetchPlay(),
   });
 

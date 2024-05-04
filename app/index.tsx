@@ -13,9 +13,9 @@ export default function Home() {
   const { push } = useRouter();
 
   const { data: playPreviews, refetch: refetchPlayPreviews } =
-    trpc.listPlayPreviews.useQuery();
+    trpc.play.listPreviews.useQuery();
 
-  const createPlayMutation = trpc.createPlay.useMutation({
+  const createPlayMutation = trpc.play.create.useMutation({
     onSuccess: async (data) => {
       refetchPlayPreviews();
       bottomSheetRef.current?.close();
