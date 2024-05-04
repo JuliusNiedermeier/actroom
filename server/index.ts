@@ -5,16 +5,17 @@ import {
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { PlayTable, playTableInsertSchema } from "./resources/schema";
+import {
+  playTable,
+  playTableInsertSchema,
+  playTableUpdateSchema,
+  sourcePartTable,
+  sourcePartTableInsertSchema,
+} from "./resources/schema";
 import { drizzle } from "./services/drizzle";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import { playTableUpdateSchema } from "./resources/play/schema";
 import { bucket } from "./services/gcp";
-import {
-  sourcePartTable,
-  sourcePartTableInsertSchema,
-} from "./resources/source-part/schema";
 import { randomUUID } from "node:crypto";
 
 const sourcePartMimeTypeMap: Record<
@@ -40,7 +41,7 @@ export const appRouter = router({
       });
 
       const [playRecord] = await drizzle
-        .insert(PlayTable)
+        .insert(playTable)
         .values({
           title: generatedTitle,
           sourceType: input.sourceType,
@@ -53,11 +54,11 @@ export const appRouter = router({
   getPlay: publicProcedure
     .input(z.object({ ID: z.string() }))
     .query(({ input }) =>
-      drizzle.query.PlayTable.findFirst({ where: eq(PlayTable.ID, input.ID) })
+      drizzle.query.playTable.findFirst({ where: eq(playTable.ID, input.ID) })
     ),
 
   listPlayPreviews: publicProcedure.query(() =>
-    drizzle.query.PlayTable.findMany({
+    drizzle.query.playTable.findMany({
       columns: { ID: true, title: true, conversionStatus: true },
     })
   ),
@@ -66,9 +67,9 @@ export const appRouter = router({
     .input(z.object({ ID: z.string(), data: playTableUpdateSchema }))
     .mutation(async ({ input }) => {
       const [updatedPlay] = await drizzle
-        .update(PlayTable)
+        .update(playTable)
         .set(input.data)
-        .where(eq(PlayTable.ID, input.ID))
+        .where(eq(playTable.ID, input.ID))
         .returning();
       return updatedPlay;
     }),
@@ -76,7 +77,7 @@ export const appRouter = router({
   deletePlay: publicProcedure
     .input(z.object({ ID: z.string() }))
     .mutation(({ input }) =>
-      drizzle.delete(PlayTable).where(eq(PlayTable.ID, input.ID))
+      drizzle.delete(playTable).where(eq(playTable.ID, input.ID))
     ),
 
   createSourcePart: publicProcedure
