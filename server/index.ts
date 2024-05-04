@@ -5,11 +5,11 @@ import {
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { PlayTable, PlayTableInsertSchema } from "./resources/schema";
+import { PlayTable, playTableInsertSchema } from "./resources/schema";
 import { drizzle } from "./services/drizzle";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import { PlayTableUpdateSchema } from "./resources/play/schema";
+import { playTableUpdateSchema } from "./resources/play/schema";
 import { bucket } from "./services/gcp";
 
 export const appRouter = router({
@@ -18,7 +18,7 @@ export const appRouter = router({
   }),
 
   createPlay: publicProcedure
-    .input(PlayTableInsertSchema.pick({ sourceType: true }))
+    .input(playTableInsertSchema.pick({ sourceType: true }))
     .mutation(async ({ input }) => {
       const generatedTitle = uniqueNamesGenerator({
         dictionaries: [adjectives, colors, animals],
@@ -50,7 +50,7 @@ export const appRouter = router({
   ),
 
   updatePlay: publicProcedure
-    .input(z.object({ ID: z.string(), data: PlayTableUpdateSchema }))
+    .input(z.object({ ID: z.string(), data: playTableUpdateSchema }))
     .mutation(async ({ input }) => {
       const [updatedPlay] = await drizzle
         .update(PlayTable)

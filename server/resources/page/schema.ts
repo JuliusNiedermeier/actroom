@@ -2,7 +2,7 @@ import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { PlayTable } from "../schema";
 import { relations } from "drizzle-orm";
 
-export const PageTable = pgTable("page", {
+export const pageTable = pgTable("page", {
   ID: uuid("id").primaryKey().defaultRandom(),
   playID: uuid("play_id")
     .notNull()
@@ -11,9 +11,9 @@ export const PageTable = pgTable("page", {
   file: text("file").notNull(),
 });
 
-export const pageTableRelations = relations(PageTable, ({ one }) => ({
+export const pageTableRelations = relations(pageTable, ({ one }) => ({
   play: one(PlayTable, {
-    fields: [PageTable.playID],
+    fields: [pageTable.playID],
     references: [PlayTable.ID],
   }),
 }));

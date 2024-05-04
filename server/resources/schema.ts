@@ -1,14 +1,14 @@
 export {
-  PlayTable,
+  playTable as PlayTable,
   playConversionStatusEnum,
   playSourceTypeEnum,
   playTableRelations,
-  PlayTableInsertSchema,
-  PlayTableUpdateSchema,
-  PlayTableSelectSchema,
+  playTableInsertSchema,
+  playTableUpdateSchema,
+  playTableSelectSchema,
   type PlayTableInsert,
   type PlayTableUpdate,
   type PlayTableSelect,
 } from "./play/schema";
-// export { PageTable, pageTableRelations } from "./page/schema";
-// export { BlockTable, blockTypeEnum, blockTableRelations } from "./block/schema";
+// export { pageTable, pageTableRelations } from "./page/schema";
+// export { blockTable, blockTypeEnum, blockTableRelations } from "./block/schema";

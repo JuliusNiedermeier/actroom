@@ -2,8 +2,8 @@ import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-// import { PageTable } from "../schema";
-// import { BlockTable } from "../block/schema";
+// import { pageTable } from "../schema";
+// import { blockTable } from "../block/schema";
 
 export const playConversionStatusEnum = pgEnum("play_conversion_status", [
   "pending",
@@ -14,7 +14,7 @@ export const playConversionStatusEnum = pgEnum("play_conversion_status", [
 
 export const playSourceTypeEnum = pgEnum("play_source_type", ["pdf", "image"]);
 
-export const PlayTable = pgTable("play", {
+export const playTable = pgTable("play", {
   ID: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   visited: boolean("visited").notNull().default(false),
@@ -24,19 +24,17 @@ export const PlayTable = pgTable("play", {
   sourceType: playSourceTypeEnum("source_type").notNull(),
 });
 
-export const playTableRelations = relations(PlayTable, ({ many }) => ({
-  // pages: many(PageTable),
-  // blocks: many(BlockTable),
+export const playTableRelations = relations(playTable, ({ many }) => ({
+  // pages: many(pageTable),
+  // blocks: many(blockTable),
 }));
 
-export const PlayTableInsertSchema = createInsertSchema(PlayTable);
-export const PlayTableUpdateSchema = createInsertSchema(PlayTable)
-  .omit({
-    ID: true,
-  })
+export const playTableInsertSchema = createInsertSchema(playTable);
+export const playTableUpdateSchema = createInsertSchema(playTable)
+  .omit({ ID: true })
   .partial();
-export const PlayTableSelectSchema = createSelectSchema(PlayTable);
+export const playTableSelectSchema = createSelectSchema(playTable);
 
-export type PlayTableInsert = z.infer<typeof PlayTableInsertSchema>;
-export type PlayTableUpdate = z.infer<typeof PlayTableUpdateSchema>;
-export type PlayTableSelect = z.infer<typeof PlayTableSelectSchema>;
+export type PlayTableInsert = z.infer<typeof playTableInsertSchema>;
+export type PlayTableUpdate = z.infer<typeof playTableUpdateSchema>;
+export type PlayTableSelect = z.infer<typeof playTableSelectSchema>;

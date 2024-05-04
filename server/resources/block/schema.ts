@@ -19,7 +19,7 @@ export const blockTypeEnum = pgEnum("block_type", [
   "stage-direction",
 ]);
 
-export const BlockTable = pgTable("block", {
+export const blockTable = pgTable("block", {
   ID: serial("id"),
   playID: uuid("play_id")
     .notNull()
@@ -30,11 +30,11 @@ export const BlockTable = pgTable("block", {
   role: text("role"),
 });
 
-export const blockTableRelations = relations(BlockTable, ({ one }) => ({
+export const blockTableRelations = relations(blockTable, ({ one }) => ({
   play: one(PlayTable, {
-    fields: [BlockTable.playID],
+    fields: [blockTable.playID],
     references: [PlayTable.ID],
   }),
 }));
 
-export type BlockSelect = InferSelectModel<typeof BlockTable>;
+export type BlockSelect = InferSelectModel<typeof blockTable>;
