@@ -7,7 +7,13 @@ loadEnvConfig(cwd());
 const envSchema = z.object({
   NEON_CONNECTION_STRING: z.string(),
   GEMINI_API_KEY: z.string(),
-  BLOB_READ_WRITE_TOKEN: z.string(),
+
+  GCP_PROJECT_ID: z.string(),
+  GCP_PRIVATE_KEY_ID: z.string(),
+  GCP_PRIVATE_KEY: z.string(),
+  GCP_CLIENT_EMAIL: z.string(),
+  GCP_CLIENT_ID: z.string(),
+  GCP_CLIENT_X509_CERT_URL: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
