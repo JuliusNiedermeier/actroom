@@ -8,7 +8,7 @@ export const sourcePartTable = pgTable("source_part", {
   ID: uuid("id").primaryKey().defaultRandom(),
   playID: uuid("play_id")
     .notNull()
-    .references(() => playTable.ID),
+    .references(() => playTable.ID, { onDelete: "cascade" }),
   type: playSourceTypeEnum("type").notNull(),
   storageURI: text("storage_uri").notNull(),
   upload_complete: boolean("upload_complete").notNull().default(false),
