@@ -11,6 +11,7 @@ import {
   playTableUpdateSchema,
   sourcePartTable,
   sourcePartTableInsertSchema,
+  sourcePartTableUpdateSchema,
 } from "./resources/schema";
 import { drizzle } from "./services/drizzle";
 import { z } from "zod";
@@ -111,6 +112,18 @@ export const appRouter = router({
       });
 
       return { sourcePart, uploadURL };
+    }),
+
+  updateSourcePart: publicProcedure
+    .input(z.object({ ID: z.string(), data: sourcePartTableUpdateSchema }))
+    .mutation(async ({ input }) => {
+      const [updatedSourcePart] = await drizzle
+        .update(sourcePartTable)
+        .set(input.data)
+        .where(eq(sourcePartTable.ID, input.ID))
+        .returning();
+
+      return updatedSourcePart;
     }),
 });
 
