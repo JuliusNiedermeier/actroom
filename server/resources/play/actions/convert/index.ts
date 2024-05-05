@@ -2,19 +2,27 @@ import { drizzle } from "@/server/services/drizzle";
 import { publicProcedure } from "@/server/trpc";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { playTable } from "../../schema";
+import { PlayTableUpdate, playTable } from "../../schema";
 import { Part } from "@google/generative-ai";
 import { sourcePartMimeTypeMap } from "@/server/resources/source-part/actions/create-soruce-part";
 import { prompt } from "./prompt";
 import { gemini1P5, safetySettings } from "@/server/services/gemini";
+import { generateBlocks } from "./generate-blocks";
+
+const setPlayConversionStatus = async (
+  playID: string,
+  status: PlayTableUpdate["conversionStatus"]
+) => {
+  drizzle
+    .update(playTable)
+    .set({ conversionStatus: status })
+    .where(eq(playTable.ID, playID));
+};
 
 export const convertPlay = publicProcedure
   .input(z.object({ ID: z.string() }))
   .mutation(async ({ input }) => {
-    drizzle
-      .update(playTable)
-      .set({ conversionStatus: "processing" })
-      .where(eq(playTable.ID, input.ID));
+    setPlayConversionStatus(input.ID, "processing");
 
     const play = await drizzle.query.playTable.findFirst({
       where: eq(playTable.ID, input.ID),
@@ -30,15 +38,17 @@ export const convertPlay = publicProcedure
       },
     }));
 
-    const instructionMessagePart: Part = {
-      text: prompt,
-    };
-
     const { stream } = await gemini1P5.generateContentStream({
       contents: [
-        { role: "user", parts: [...fileMessageParts, instructionMessagePart] },
+        { role: "user", parts: [...fileMessageParts, { text: prompt }] },
       ],
       generationConfig: { maxOutputTokens: 8192 },
       safetySettings,
     });
+
+    for await (let block of generateBlocks(stream)) {
+      console.log(block);
+    }
+
+    setPlayConversionStatus(input.ID, "complete");
   });
