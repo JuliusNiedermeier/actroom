@@ -16,6 +16,7 @@ const envSchema = z.object({
   GCP_CLIENT_X509_CERT_URL: z.string(),
 
   GCP_BUCKET_NAME: z.string(),
+  VERTEX_AI_LOCATION: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
