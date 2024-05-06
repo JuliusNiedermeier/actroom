@@ -7,7 +7,9 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { playTable } from "../schema";
-import { relations, InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const blockTypeEnum = pgEnum("block_type", [
   "page-number",
@@ -37,4 +39,12 @@ export const blockTableRelations = relations(blockTable, ({ one }) => ({
   }),
 }));
 
-export type BlockSelect = InferSelectModel<typeof blockTable>;
+export const blockTableInsertSchema = createInsertSchema(blockTable);
+export const blockTableUpdateSchema = createInsertSchema(blockTable)
+  .omit({ ID: true })
+  .partial();
+export const blockTableSelectSchema = createSelectSchema(blockTable);
+
+export type BlockTableInsert = z.infer<typeof blockTableInsertSchema>;
+export type BlockTableUpdate = z.infer<typeof blockTableUpdateSchema>;
+export type BlockTableSelect = z.infer<typeof blockTableSelectSchema>;
