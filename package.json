@@ -14,8 +14,8 @@
     "db:migrate": "tsx ./scripts/migrate-database.ts",
     "db:introspect": "drizzle-kit introspect:pg",
     "db:studio": "drizzle-kit studio",
-    "patch-polyfills": "tsx ./scripts/patch-polyfills.ts",
-    "postinstall": "pnpm patch-polyfills"
+    "patch-expo-server": "tsx ./scripts/patch-expo-server.ts",
+    "postinstall": "pnpm patch-expo-server"
   },
   "jest": {
     "preset": "jest-expo"
