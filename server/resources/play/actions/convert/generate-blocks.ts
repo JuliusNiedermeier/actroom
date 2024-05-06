@@ -1,10 +1,10 @@
-import { BlockSelect } from "@/server/resources/block/schema";
+import { BlockTableSelect } from "@/server/resources/schema";
 import { GenerateContentResponse } from "@google-cloud/vertexai";
 
 const parseLine = (line: string) => {
   try {
     return JSON.parse(line) as Omit<
-      BlockSelect,
+      BlockTableSelect,
       "ID" | "playID" | "pageID" | "position"
     >;
   } catch (error) {
