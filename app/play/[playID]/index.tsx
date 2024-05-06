@@ -9,6 +9,7 @@ const PlayScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
   const navigation = useNavigation();
   const { push } = useRouter();
+  const { play } = trpc.useUtils();
 
   const { data: playData, refetch: refetchPlay } = trpc.play.getOne.useQuery({
     ID: playID,
@@ -26,6 +27,16 @@ const PlayScreen: FC = () => {
     onSuccess: () => refetchPlay(),
   });
 
+  const startConversionMutation = trpc.play.convert.useMutation({
+    onMutate: () => {
+      play.getOne.setData(
+        { ID: playID },
+        (data) => data && { ...data, conversionStatus: "processing" }
+      );
+    },
+    onSuccess: () => refetchPlay(),
+  });
+
   useEffect(() => {
     if (!playData || playData.visited) return;
     updatePlayMutation.mutate({ ID: playID, data: { visited: true } });
@@ -40,7 +51,8 @@ const PlayScreen: FC = () => {
     if (playData.sourceParts.length < 1) return "awaiting-upload";
     if (playData.sourceParts.filter((part) => part.upload_complete).length < 1)
       return "uploading";
-    return "awaiting-conversion";
+
+    return playData.conversionStatus;
   }, [playData]);
 
   useEffect(() => {
@@ -115,8 +127,26 @@ const PlayScreen: FC = () => {
           <Text>Select PDF</Text>
         </Pressable>
       )}
+
       {playStatus === "uploading" && <Text>Uploading...</Text>}
-      {playStatus === "awaiting-conversion" && <Text>Ready to convert</Text>}
+
+      {playStatus === "pending" && (
+        <Pressable
+          onPress={() => startConversionMutation.mutate({ ID: playID })}
+          style={({ pressed }) => ({
+            paddingHorizontal: 32,
+            paddingVertical: 16,
+            borderRadius: 16,
+            backgroundColor: "white",
+            opacity: pressed ? 0.5 : 1,
+          })}
+        >
+          <Text>Start conversion</Text>
+        </Pressable>
+      )}
+
+      {playStatus === "processing" && <Text>Processing...</Text>}
+      {playStatus === "complete" && <Text>Complete</Text>}
     </View>
   );
 };
