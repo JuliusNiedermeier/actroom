@@ -2,9 +2,7 @@ import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { sourcePartTable } from "../schema";
-// import { pageTable } from "../schema";
-// import { blockTable } from "../block/schema";
+import { sourcePartTable, blockTable } from "../schema";
 
 export const playConversionStatusEnum = pgEnum("play_conversion_status", [
   "pending",
@@ -27,8 +25,7 @@ export const playTable = pgTable("play", {
 
 export const playTableRelations = relations(playTable, ({ many }) => ({
   sourceParts: many(sourcePartTable),
-  // pages: many(pageTable),
-  // blocks: many(blockTable),
+  blocks: many(blockTable),
 }));
 
 export const playTableInsertSchema = createInsertSchema(playTable);
