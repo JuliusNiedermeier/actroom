@@ -1,5 +1,5 @@
 import { BlockSelect } from "@/server/resources/block/schema";
-import { EnhancedGenerateContentResponse } from "@google/generative-ai";
+import { GenerateContentResponse } from "@google-cloud/vertexai";
 
 const parseLine = (line: string) => {
   try {
@@ -13,13 +13,15 @@ const parseLine = (line: string) => {
 };
 
 export const generateBlocks = async function* (
-  stream: AsyncGenerator<EnhancedGenerateContentResponse>
+  stream: AsyncGenerator<GenerateContentResponse>
 ) {
   let buffer = "";
   let blockIndex = 0;
 
-  for await (let chunk of stream) {
-    buffer += chunk.text();
+  for await (const chunk of stream) {
+    if (!chunk.candidates) continue;
+
+    buffer += chunk.candidates[0].content.parts[0].text;
 
     const lastLineBreak = buffer.lastIndexOf("\n");
     if (lastLineBreak < 0) continue;

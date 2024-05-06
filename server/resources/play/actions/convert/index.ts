@@ -6,8 +6,8 @@ import { PlayTableUpdate, playTable } from "../../schema";
 import { Part } from "@google/generative-ai";
 import { sourcePartMimeTypeMap } from "@/server/resources/source-part/actions/create-soruce-part";
 import { prompt } from "./prompt";
-import { gemini1P5, safetySettings } from "@/server/services/gemini";
 import { generateBlocks } from "./generate-blocks";
+import { gemini1P5, safetySettings } from "@/server/services/vertex-ai";
 
 const setPlayConversionStatus = async (
   playID: string,
@@ -46,7 +46,7 @@ export const convertPlay = publicProcedure
       safetySettings,
     });
 
-    for await (let block of generateBlocks(stream)) {
+    for await (const block of generateBlocks(stream)) {
       console.log(block);
     }
 
