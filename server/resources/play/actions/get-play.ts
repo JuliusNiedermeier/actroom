@@ -9,6 +9,6 @@ export const getPlay = publicProcedure
   .query(({ input }) =>
     drizzle.query.playTable.findFirst({
       where: eq(playTable.ID, input.ID),
-      with: { sourceParts: true },
+      with: { sourceParts: true, blocks: true },
     })
   );

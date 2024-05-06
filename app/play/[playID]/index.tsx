@@ -11,9 +11,15 @@ const PlayScreen: FC = () => {
   const { push } = useRouter();
   const { play } = trpc.useUtils();
 
-  const { data: playData, refetch: refetchPlay } = trpc.play.getOne.useQuery({
-    ID: playID,
-  });
+  const { data: playData, refetch: refetchPlay } = trpc.play.getOne.useQuery(
+    {
+      ID: playID,
+    },
+    {
+      refetchInterval: ({ state }) =>
+        state.data?.conversionStatus === "processing" ? 1000 : undefined,
+    }
+  );
 
   const updatePlayMutation = trpc.play.update.useMutation({
     onSuccess: () => refetchPlay(),
@@ -145,8 +151,18 @@ const PlayScreen: FC = () => {
         </Pressable>
       )}
 
-      {playStatus === "processing" && <Text>Processing...</Text>}
-      {playStatus === "complete" && <Text>Complete</Text>}
+      {(playStatus === "complete" || playStatus === "processing") && (
+        <View style={{ height: "100%", width: "100%" }}>
+          {playStatus === "processing" && <Text>Processing...</Text>}
+          {playData?.blocks.map((block) => (
+            <View key={block.ID}>
+              <Text>{block.type}</Text>
+              {block.role && <Text>{block.role}</Text>}
+              <Text>{block.content}</Text>
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 };
