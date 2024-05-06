@@ -8,6 +8,7 @@ import { sourcePartMimeTypeMap } from "@/server/resources/source-part/actions/cr
 import { prompt } from "./prompt";
 import { generateBlocks } from "./generate-blocks";
 import { gemini1P5, safetySettings } from "@/server/services/vertex-ai";
+import { blockTable } from "@/server/resources/schema";
 
 const setPlayConversionStatus = async (
   playID: string,
@@ -47,8 +48,14 @@ export const convertPlay = publicProcedure
       safetySettings,
     });
 
-    for await (const block of generateBlocks(stream)) {
-      console.log(block);
+    for await (const item of generateBlocks(stream)) {
+      await drizzle.insert(blockTable).values({
+        playID: input.ID,
+        position: item.index,
+        type: item.block.type,
+        content: item.block.content,
+        role: item.block.role,
+      });
     }
 
     await setPlayConversionStatus(input.ID, "complete");
