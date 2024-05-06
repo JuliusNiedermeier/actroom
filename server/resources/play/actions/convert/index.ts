@@ -13,7 +13,7 @@ const setPlayConversionStatus = async (
   playID: string,
   status: PlayTableUpdate["conversionStatus"]
 ) => {
-  drizzle
+  return drizzle
     .update(playTable)
     .set({ conversionStatus: status })
     .where(eq(playTable.ID, playID));
@@ -22,7 +22,8 @@ const setPlayConversionStatus = async (
 export const convertPlay = publicProcedure
   .input(z.object({ ID: z.string() }))
   .mutation(async ({ input }) => {
-    setPlayConversionStatus(input.ID, "processing");
+    // Awaiting here is probably not nescessary
+    await setPlayConversionStatus(input.ID, "processing");
 
     const play = await drizzle.query.playTable.findFirst({
       where: eq(playTable.ID, input.ID),
@@ -50,5 +51,5 @@ export const convertPlay = publicProcedure
       console.log(block);
     }
 
-    setPlayConversionStatus(input.ID, "complete");
+    await setPlayConversionStatus(input.ID, "complete");
   });
