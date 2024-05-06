@@ -4,6 +4,7 @@ import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
 import { Pressable, View, Text, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { blockTypeRendererMap } from "@/components/block-renderers/index";
 
 const PlayScreen: FC = () => {
   const { playID } = useLocalSearchParams<{ playID: string }>();
@@ -130,19 +131,14 @@ const PlayScreen: FC = () => {
     return (
       <ScrollView
         ref={scrollViewRef}
-        style={{ padding: 16 }}
-        contentContainerStyle={{ gap: 8 }}
+        style={{}}
+        contentContainerStyle={{ gap: 16, padding: 16, paddingBottom: 32 }}
       >
-        {playData?.blocks.map((block) => (
-          <View
-            key={block.ID}
-            style={{ borderRadius: 16, padding: 16, backgroundColor: "white" }}
-          >
-            <Text>{block.type}</Text>
-            {block.role && <Text>{block.role}</Text>}
-            <Text>{block.content}</Text>
-          </View>
-        ))}
+        {playData?.blocks.map((block) => {
+          const BlockComponent = blockTypeRendererMap[block.type];
+          if (!BlockComponent) return null;
+          return <BlockComponent {...block} />;
+        })}
       </ScrollView>
     );
   }
