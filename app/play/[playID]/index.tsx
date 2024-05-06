@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { FC, useEffect, useMemo, useRef } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
 import { Pressable, View, Text, ScrollView } from "react-native";
@@ -136,8 +136,8 @@ const PlayScreen: FC = () => {
       >
         {playData?.blocks.map((block) => {
           const BlockComponent = blockTypeRendererMap[block.type];
-          if (!BlockComponent) return null;
-          return <BlockComponent {...block} />;
+          if (!BlockComponent) return <Fragment key={block.ID} />;
+          return <BlockComponent key={block.ID} {...block} />;
         })}
       </ScrollView>
     );
