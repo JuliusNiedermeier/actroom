@@ -1,8 +1,8 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useRef } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import { trpc } from "@/services/trpc";
-import { Pressable, View, Text } from "react-native";
+import { Pressable, View, Text, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const PlayScreen: FC = () => {
@@ -10,6 +10,8 @@ const PlayScreen: FC = () => {
   const navigation = useNavigation();
   const { push } = useRouter();
   const { play } = trpc.useUtils();
+
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const { data: playData, refetch: refetchPlay } = trpc.play.getOne.useQuery(
     {
@@ -20,6 +22,13 @@ const PlayScreen: FC = () => {
         state.data?.conversionStatus === "processing" ? 1000 : undefined,
     }
   );
+
+  useEffect(() => {
+    if (!scrollViewRef.current || playData?.conversionStatus !== "processing") {
+      return;
+    }
+    scrollViewRef.current.scrollToEnd({ animated: true });
+  }, [scrollViewRef, playData]);
 
   const updatePlayMutation = trpc.play.update.useMutation({
     onSuccess: () => refetchPlay(),
@@ -117,8 +126,36 @@ const PlayScreen: FC = () => {
     if (playData?.visited === false) selectDocument();
   }, [playData?.visited]);
 
+  if (playStatus === "complete" || playStatus === "processing") {
+    return (
+      <ScrollView
+        ref={scrollViewRef}
+        style={{ padding: 16 }}
+        contentContainerStyle={{ gap: 8 }}
+      >
+        {playData?.blocks.map((block) => (
+          <View
+            key={block.ID}
+            style={{ borderRadius: 16, padding: 16, backgroundColor: "white" }}
+          >
+            <Text>{block.type}</Text>
+            {block.role && <Text>{block.role}</Text>}
+            <Text>{block.content}</Text>
+          </View>
+        ))}
+      </ScrollView>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+      }}
+    >
       {playStatus === "awaiting-upload" && (
         <Pressable
           onPress={selectDocument}
@@ -149,19 +186,6 @@ const PlayScreen: FC = () => {
         >
           <Text>Start conversion</Text>
         </Pressable>
-      )}
-
-      {(playStatus === "complete" || playStatus === "processing") && (
-        <View style={{ height: "100%", width: "100%" }}>
-          {playStatus === "processing" && <Text>Processing...</Text>}
-          {playData?.blocks.map((block) => (
-            <View key={block.ID}>
-              <Text>{block.type}</Text>
-              {block.role && <Text>{block.role}</Text>}
-              <Text>{block.content}</Text>
-            </View>
-          ))}
-        </View>
       )}
     </View>
   );
