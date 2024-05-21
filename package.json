@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "build:dev:android": "eas build --profile development --platform android",
     "test": "jest --watchAll",
+    "db:push": "drizzle-kit push:pg",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx ./scripts/migrate-database.ts",
     "db:introspect": "drizzle-kit introspect:pg",
