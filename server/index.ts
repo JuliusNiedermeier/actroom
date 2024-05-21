@@ -1,4 +1,5 @@
-import { router } from "./trpc";
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { router, createContext } from "./trpc";
 import { createPlay } from "./resources/play/actions/create-play";
 import { getPlay } from "./resources/play/actions/get-play";
 import { listPlayPreviews } from "./resources/play/actions/list-play-reviews";
@@ -22,10 +23,18 @@ const sourcePartRouter = router({
   update: updateSourcePart,
 });
 
-export const appRouter = router({
+const appRouter = router({
   play: playRouter,
   sourcePart: sourcePartRouter,
 });
+
+export const createHandler = (endpoint: string) => (req: Request) =>
+  fetchRequestHandler({
+    endpoint,
+    req,
+    router: appRouter,
+    createContext,
+  });
 
 // Export type router type signature,
 // NOT the router itself.
