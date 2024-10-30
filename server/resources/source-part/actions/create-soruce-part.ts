@@ -42,7 +42,7 @@ export const createSourcePart = publicProcedure
 
     const [uploadURL] = await file.getSignedUrl({
       action: "write",
-      expires: sessionExpiryDate,
+      expires: Date.now() + 1000 * 60 * 60, // Temporary fix for expiry date connot be in the past
       contentType: sourcePartMimeTypeMap[input.type],
     });
 

@@ -43,7 +43,8 @@ const PlayScreen: FC = () => {
     onSuccess: () => refetchPlay(),
   });
 
-  const startConversionMutation = trpc.play.convert.useMutation({
+  // const startConversionMutation = trpc.play.convert.useMutation({
+  const startConversionMutation = trpc.play.convertClean.useMutation({
     onMutate: () => {
       play.getOne.setData(
         { ID: playID },

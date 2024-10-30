@@ -16,7 +16,8 @@
     "db:introspect": "drizzle-kit introspect:pg",
     "db:studio": "drizzle-kit studio",
     "patch-expo-server": "tsx ./scripts/patch-expo-server.ts",
-    "postinstall": "pnpm patch-expo-server"
+    "generate-play-feature-types": "tsx scripts/generate-play-feature-types.ts",
+    "postinstall": "pnpm patch-expo-server && pnpm generate-play-feature-types"
   },
   "jest": {
     "preset": "jest-expo"
@@ -61,11 +62,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/fs-extra": "^11.0.4",
     "@types/react": "~18.2.45",
     "drizzle-kit": "^0.20.17",
+    "fs-extra": "^11.2.0",
     "jest": "^29.2.1",
     "jest-expo": "~50.0.4",
     "react-test-renderer": "18.2.0",
+    "ts-morph": "^22.0.0",
     "tsx": "^4.8.2",
     "typescript": "^5.1.3"
   },

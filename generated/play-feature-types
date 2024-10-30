@@ -1,0 +1,7 @@
+type TitlePlayFeature = { title: string; type: "title"; subtitle?: string | undefined; }
+type AuthorsPlayFeature = { type: "authors"; authorNames: string[]; }
+type ActPlayFeature = { number: number; type: "act"; name?: string | undefined; }
+type ScenePlayFeature = { number: number; type: "scene"; name?: string | undefined; }
+type StageDirectionPlayFeature = { type: "stage-direction"; direction: string; }
+type RoleDirectionPlayFeature = { type: "role-direction"; direction: string; roleName: string; }
+type PlayFeature = { title: string; type: "title"; subtitle?: string | undefined; } | { type: "authors"; authorNames: string[]; } | { number: number; type: "act"; name?: string | undefined; } | { number: number; type: "scene"; name?: string | undefined; } | { type: "stage-direction"; direction: string; } | { type: "role-direction"; direction: string; roleName: string; }
